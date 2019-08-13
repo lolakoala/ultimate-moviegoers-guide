@@ -8,9 +8,11 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'space-around',
+    flexDirection: 'column',
+    justifyContent: 'center',
     overflow: 'hidden',
-    margin: 48,
+    marginTop: 48,
+    marginLeft: 68,
     marginBottom: 16,
   },
   gridList: {

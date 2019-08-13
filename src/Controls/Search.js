@@ -1,6 +1,5 @@
 import React, {useState} from 'react'
 import PropTypes from 'prop-types'
-// import TextField from '@material-ui/core/TextField'
 import SearchIcon from '@material-ui/icons/Search'
 import InputBase from '@material-ui/core/InputBase'
 
@@ -28,7 +27,7 @@ const SearchControls = ({setSearchString, classes, setPage}) => {
               inputProps={{ 
                   'aria-label': 'search',
                   value: inputValue,
-                  onChange: handleChange, 
+                  onChange: handleChange,
                   }}
             />
         </div>
