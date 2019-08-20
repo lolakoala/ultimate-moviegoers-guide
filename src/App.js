@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useReducer} from 'react'
 import getFromMdb from './api/fetch'
 import MovieList from './Movies/List'
 import TitleBar from './TitleBar'
@@ -20,37 +20,73 @@ const getBaseUrl = async set => {
 }
 
 const App = () => {
-  const [movies, setMovies] = useState([])
-  const [page, setPage] = useState(1)
-  const [baseUrl, setBaseUrl] = useState('')
-  const [sort, setSort] = useState('now_playing')
-  const [searchString, setSearchString] = useState('')
-  const [maxPages, setMaxPages] = useState(0)
+  // const [movies, setMovies] = useState([])
+  // const [page, setPage] = useState(1)
+  // const [baseUrl, setBaseUrl] = useState('')
+  // const [sort, setSort] = useState('now_playing')
+  // const [searchString, setSearchString] = useState('')
+  // const [maxPages, setMaxPages] = useState(0)
+
+  const initialState = {
+    movies: [],
+    page: 1,
+    baseUrl: '',
+    sort: 'now_playing',
+    searchString: '',
+    maxPages: 0,
+  }
+
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case 'setMovies':
+        return { movies: action.movies }
+      case 'setPage':
+        return { page: action.page }
+      case 'setBaseUrl':
+        return { baseUrl: action.baseUrl }
+      case 'setSort':
+        return {sort: action.sort}
+      case 'setSearchString':
+        return {searchString: action.searchString}
+      case 'setMovies':
+        return {maxPages: action.maxPages}
+      default:
+        return new Error()
+    }
+  }
+
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   useEffect(() => {
-    const set = (results, totalPages) => {
-      setMovies(results)
-      setMaxPages(totalPages)
-    }
+    const set = (movies, maxPages) => dispatch({
+        type: 'setMovies',
+        movies,
+        maxPages, 
+      })
+    
 
-    if (searchString.length) {
-      searchMovies(set, searchString, page)
+    if (state.searchString.length) {
+      searchMovies(set, state.searchString, state.page)
     } else {
-      getMovies(sort, page, set)
+      getMovies(state.sort, state.page, set)
     }
-  }, [sort, page, searchString])
+  }, [state.sort, state.page, state.searchString])
 
   useEffect(() => {
-    if (!baseUrl) {
-      getBaseUrl(setBaseUrl)
+    if (!state.baseUrl) {
+      getBaseUrl(baseUrl => dispatch({type: 'setBaseUrl', baseUrl}))
     }
-  }, [baseUrl])
+  }, [state.baseUrl])
 
   return (
     <div style={{'textAlign': 'center', 'position': 'relative'}}>
-      <TitleBar setSearchString={setSearchString} setSort={setSort} currentSort={sort} setPage={setPage}/>
-      <MovieList movies={movies} baseUrl={baseUrl}/>
-      <NavButtons page={page} setPage={setPage} maxPages={maxPages}/>
+      <TitleBar 
+        setSearchString={searchString => dispatch({type: 'setSearchString', searchString})} 
+        setSort={sort => dispatch({type: 'setSort', sort})} 
+        currentSort={state.sort} 
+        setPage={page => dispatch({type: 'setPage', page})}/>
+      <MovieList movies={state.movies} baseUrl={state.baseUrl}/>
+      <NavButtons page={state.page} setPage={page => dispatch({ type: 'setPage', page })} maxPages={state.maxPages}/>
     </div>
   );
 }
