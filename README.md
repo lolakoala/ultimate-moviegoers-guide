@@ -1,5 +1,8 @@
 [Visit this Project!](https://lola-ultimate-moviegoers-guide.herokuapp.com/)
 
+Check out the use-reducer branch to see how I replaced useState for useReducer in App.js.
+For a project as small and modular as this, I prefer the compartmentalization and simplicity of useState. ;-)
+
 # ultimate-moviegoers-guide
 Code challenge for CCB. UI for displaying movie info, sorting, searching. 
 
